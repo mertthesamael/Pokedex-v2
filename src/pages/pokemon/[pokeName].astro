@@ -1,0 +1,38 @@
+---
+import axios from "axios";
+import Layout from "../../layouts/Layout.astro";
+import { Image } from "astro:assets";
+
+export async function getStaticPaths() {
+  const { data } = await axios(
+    "https://pokeapi.co/api/v2/pokemon?limit=100&offset=0",
+  );
+
+  return data.results.map((pokemon: any) => {
+    return {
+      params: { pokeName: pokemon.name },
+    };
+  });
+}
+const { pokeName } = Astro.params;
+const {data:targetPokemon} = await axios(`https://pokeapi.co/api/v2/pokemon/${pokeName}`)
+---
+
+<Layout title={pokeName ? pokeName : ""}>
+  <main class="bg-white w-full h-full pt-[--header-height]">
+    <div class="w-full h-full flex justify-center">
+      <Image
+      src={targetPokemon.sprites.other["official-artwork"].front_default}
+      width={480}
+      height={80}
+      alt={"Poke Icon"}
+      transition:name={pokeName}
+      />
+    </div>
+      <div>
+      <h1>
+        {pokeName}
+      </h1>
+    </div>
+  </main>
+</Layout>

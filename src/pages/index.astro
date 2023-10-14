@@ -1,0 +1,48 @@
+---
+import Layout from "../layouts/Layout.astro";
+import Card from "../components/Card.astro";
+import PokemonCard from "../components/Cards/PokemonCard.astro";
+import axios from "axios";
+import { Image } from "astro:assets";
+
+const limit = 100;
+const offset = 0;
+// const { data: pokemons } = await axios(
+// 	`https://pokeapi.co/api/v2/pokemon?limit=${limit}&offset=${offset}`,
+// );
+const pokemonsArray: any = [];
+let count = 1;
+const fetchPokemons = async () => {
+	while (count <= limit) {
+		const { data: pokemonData } = await axios(
+			`https://pokeapi.co/api/v2/pokemon/${count}/`,
+		);
+		pokemonsArray.push(pokemonData);
+
+		count = count += 1;
+	}
+};
+await fetchPokemons();
+---
+
+<Layout title="Welcome to Astro.">
+	<main class="flex justify-center bg-white pt-[--header-height]">
+		<div class="flex justify-center flex-wrap gap-[.3px]">
+			{
+				pokemonsArray.map((el: any, _i: number) => (
+					<a href={`/pokemon/${el.name}`}>
+						<PokemonCard name={el.name} pokemon={el} />
+					</a>
+				))
+			}
+
+			<!-- {pokemons.results.map((el:any, _i:number) => 
+		<a href={`/pokemon/${el.name}`}>
+			{axios(el.url).then(res => <PokemonCard name={el.name} pokemon={res.data} /> )}
+		</a>
+			)} -->
+		</div>
+	</main>
+</Layout>
+
+<style></style>

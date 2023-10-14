@@ -1,0 +1,25 @@
+---
+import { Image } from "astro:assets";
+interface Props {
+    name: string;
+    pokemon?:any
+}
+
+const { name,pokemon } = Astro.props;
+
+
+---
+
+<div
+transition:persist
+    class="h-[12rem] w-[9rem] border transition-all duration-300 hover:bg-gray-400/20 flex flex-col items-center justify-center"
+>
+    <Image
+        src={pokemon.sprites.other["official-artwork"].front_default}
+        alt="Pokemon Icon"
+        width={80}
+        height={80}
+        transition:name={name}
+    />
+    <h1>{name}</h1>
+</div>
