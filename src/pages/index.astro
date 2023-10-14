@@ -1,12 +1,9 @@
 ---
 import Layout from "../layouts/Layout.astro";
-import Card from "../components/Card.astro";
 import PokemonCard from "../components/Cards/PokemonCard.astro";
 import axios from "axios";
-import { Image } from "astro:assets";
 
 const limit = 100;
-const offset = 0;
 // const { data: pokemons } = await axios(
 // 	`https://pokeapi.co/api/v2/pokemon?limit=${limit}&offset=${offset}`,
 // );
@@ -27,20 +24,18 @@ await fetchPokemons();
 
 <Layout title="Welcome to Astro.">
 	<main class="flex justify-center bg-white pt-[--header-height]">
-		<div class="flex justify-center flex-wrap gap-[.3px]">
+		<div class="flex justify-center flex-wrap">
 			{
-				pokemonsArray.map((el: any, _i: number) => (
-					<a href={`/pokemon/${el.name}`}>
-						<PokemonCard name={el.name} pokemon={el} />
-					</a>
-				))
+				pokemonsArray.length < 100 ? (
+					<h1>loading</h1>
+				) : (
+					pokemonsArray.map((el: any, _i: number) => (
+						<a href={`/pokemon/${el.name}`}>
+							<PokemonCard name={el.name} pokemon={el} />
+						</a>
+					))
+				)
 			}
-
-			<!-- {pokemons.results.map((el:any, _i:number) => 
-		<a href={`/pokemon/${el.name}`}>
-			{axios(el.url).then(res => <PokemonCard name={el.name} pokemon={res.data} /> )}
-		</a>
-			)} -->
 		</div>
 	</main>
 </Layout>

@@ -1,25 +1,57 @@
 ---
 import { Image } from "astro:assets";
+import { formatNumberWithLeadingZeros } from "../../lib/utils";
 interface Props {
     name: string;
     pokemon?:any
 }
 
 const { name,pokemon } = Astro.props;
-
-
+const imgHovered = false
 ---
 
 <div
 transition:persist
-    class="h-[12rem] w-[9rem] border transition-all duration-300 hover:bg-gray-400/20 flex flex-col items-center justify-center"
+    class="pokemoncard h-[12rem] hover:!text-black/70 text-black/50 w-[9rem] border transition-all duration-300 hover:bg-gray-400/20 flex flex-col gap-4 p-2 "
 >
-    <Image
-        src={pokemon.sprites.other["official-artwork"].front_default}
-        alt="Pokemon Icon"
-        width={80}
-        height={80}
-        transition:name={name}
-    />
-    <h1>{name}</h1>
+<div>
+    <span class="text-2xl font-bold">
+        {formatNumberWithLeadingZeros(pokemon.order)}
+    </span>
+    <h1 class="text-sm font-bold capitalize">{name}</h1>
 </div>
+<div class=" w-full h-full flex justify-center items-center relative">
+    <Image
+    src={pokemon.sprites.other["official-artwork"].front_default}
+    alt="Pokemon Icon"
+    width={90}
+    height={80}
+    transition:name={name}
+    style={{objectFit:'contain'}}
+    class="mainImg transition-all duration-700"
+
+    />
+    <Image
+    src={pokemon.sprites.versions['generation-v']['black-white'].animated.front_default}
+    alt="Pokemon Icon"
+    width={70}
+    height={70}
+    style={{objectFit:'contain'}}
+    class="transition-all duration-700 animatedImg absolute"
+    />
+</div>
+</div>
+
+<style>
+    .animatedImg{
+        
+        opacity: 0;
+    }
+    .pokemoncard:hover  .mainImg {
+        opacity: 0;
+    }
+    .pokemoncard:hover  .animatedImg {
+        opacity: 1;
+
+    }
+</style>
